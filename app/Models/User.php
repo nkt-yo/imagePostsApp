@@ -58,4 +58,17 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+        
+    protected $table = 'users';
+    protected $primaryKey = 'email';
+
+    public static function findAllUserName()
+    {
+        $userNames = User::select('name')
+                        ->orderBy('id')
+                        ->paginate(15);
+        return $userNames;
+    }
+
 }

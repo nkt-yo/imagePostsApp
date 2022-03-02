@@ -72,28 +72,18 @@
             @endif
             </div>
             <div class="p-3 rounded col-span-2 w-full sm:max-w-4xl mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">画像一覧</div>
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">ユーザー</div>
-        </div>
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 sm:items-center py-4 sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">
+                <h2>ユーザー</h2>
+                {{-- {{$userNames}} --}}
+                @foreach ($users as $user)
+                <li class="list-group-item">
+                  {{ $user->name }}
+                </li>
+              @endforeach
+                {{ $users->links() }}
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-            <div class="side">
-                <div class="login">sign in</div>
-                <div class="users">users</div>
             </div>
-            <div class="test">aaaa</div>
-
         </div>
+    
     </body>
 </html>
