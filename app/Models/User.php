@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
@@ -67,8 +68,18 @@ class User extends Authenticatable
     {
         $userNames = User::select('name')
                         ->orderBy('id')
-                        ->paginate(15);
+                        ->paginate(15, ["*"], 'userpage')
+                        ->appends(["contentpage" => \Request::get('contentpage')]);
         return $userNames;
+    }
+
+    public static function findRandomOneUserId()
+    {
+        $userId = User::inRandomOrder()
+                        ->select('id')
+                        ->first();
+
+        return $userId;
     }
 
 }

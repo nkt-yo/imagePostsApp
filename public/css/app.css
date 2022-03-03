@@ -2026,6 +2026,9 @@ select {
   .sm\:max-w-4xl {
     max-width: 56rem;
   }
+  .sm\:max-w-full {
+    max-width: 100%;
+  }
 
   .sm\:flex-1 {
     flex: 1 1 0%;

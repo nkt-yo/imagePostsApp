@@ -71,10 +71,26 @@
                 </div>
             @endif
             </div>
-            <div class="p-3 rounded col-span-2 w-full sm:max-w-4xl mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">画像一覧</div>
+            <div class="p-3 rounded col-span-2 w-full sm:max-w-full mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">
+                <h2>画像一覧</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    @foreach ($contents as $content)
+                    <li class="list-group-item">
+
+                    <img src="{{ asset('storage/images/'.$content->path) }}" width="100" height="100">
+
+                    <p>{{ $content->title }}</p>
+                    <p>{{ $content->name }}</p>
+                    </li>
+                  @endforeach
+                    {{ $contents->links() }}
+                </div>
+            
+            </div>
+
+
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md overflow-hidden sm:rounded-lg">
                 <h2>ユーザー</h2>
-                {{-- {{$userNames}} --}}
                 @foreach ($users as $user)
                 <li class="list-group-item">
                   {{ $user->name }}

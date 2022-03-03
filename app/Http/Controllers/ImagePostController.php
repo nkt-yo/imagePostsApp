@@ -4,21 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Content;
 
 
 class ImagePostController extends Controller
 {
     public function index(){
 
-        $users =User::findAllUserName();
-        print($users);
-        \Debugbar::log($users);
+        // ユーザ一覧
+        $users = User::findAllUserName();
         foreach ($users as $user) {
             \Debugbar::log($user->name);
         }
+        
+        // 画像/動画一覧
+        $contents = Content::findAllContents();
+        foreach ($contents as $content) {
+            \Debugbar::log($content);
+        }
 
-
-
-        return view('home', ['users' => $users]);
+        return view('home', ['users' => $users,'contents' => $contents]);
     }
 }
