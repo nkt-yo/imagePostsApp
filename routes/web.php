@@ -15,6 +15,8 @@ use App\Http\Controllers\ImagePostController;
 
 
 Route::get('/', [ImagePostController::class, 'index']);
+Route::get('/user/{id}', [ImagePostController::class, 'userDetail']);
+Route::get('/image/{id}', [ImagePostController::class, 'imageDetail']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');

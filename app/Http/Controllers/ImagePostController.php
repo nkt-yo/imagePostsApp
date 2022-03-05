@@ -25,12 +25,15 @@ class ImagePostController extends Controller
 
     public function userDetail($userId){
 
+
         // ユーザ一覧取得
         $users = $this->getUserList();
+        \Debugbar::log($users);
 
         // ユーザ名取得
         $user = $this->getOneUserName($userId);
-        \Debugbar::log($user->name);
+        \Debugbar::log($user);
+
         // 画像/動画一覧取取得
         $contents = Content::findOneUserDetail($userId);
         foreach ($contents as $content) {
@@ -38,6 +41,17 @@ class ImagePostController extends Controller
         }
 
         return view('userDetail', ['users' => $users,'user' => $user,'contents' => $contents]);
+    }
+
+    public function imageDetail($contentId){
+        // ユーザ一覧取得
+        $users = $this->getUserList();
+        \Debugbar::log($contentId);
+        // 画像/動画情報取得
+        $contents = Content::findOneImageDetail($contentId);
+        \Debugbar::log($contents);
+
+        return view('imageDetail', ['users' => $users, 'contents' => $contents]);
     }
 
     /**
@@ -49,6 +63,7 @@ class ImagePostController extends Controller
         $users = User::findAllUserName();
         foreach ($users as $user) {
             \Debugbar::log($user->name);
+            \Debugbar::log($user->id);
         }
         return $users;
     }

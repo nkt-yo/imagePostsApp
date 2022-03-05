@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public static function findAllUserName()
     {
-        $userNames = User::select('name')
+        $userNames = User::select('name', 'id')
                         ->orderBy('id')
                         ->paginate(15, ["*"], 'userpage')
                         ->appends(["contentpage" => \Request::get('contentpage')]);
