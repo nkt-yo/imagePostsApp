@@ -1,0 +1,8 @@
+li {
+    list-style: none;
+}
+.contents {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-columns: 1fr 2fr;
+}

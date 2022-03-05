@@ -13,11 +13,8 @@ use App\Http\Controllers\ImagePostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/home', [ImagePostController::class, 'index']);
+Route::get('/', [ImagePostController::class, 'index']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
