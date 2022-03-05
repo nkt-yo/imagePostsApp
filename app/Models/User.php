@@ -73,6 +73,14 @@ class User extends Authenticatable
         return $userNames;
     }
 
+    public static function findOneUsername($userId)
+    {
+        $userName = User::select('name')
+                        ->where('users.id', $userId)
+                        ->first();
+        return $userName;
+    }
+
     public static function findRandomOneUserId()
     {
         $userId = User::inRandomOrder()
