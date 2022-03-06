@@ -14,17 +14,25 @@
                 @yield('side')
                 {{-- メインコンテンツ --}}
                 <div class="main">
-                    <div class="image-list p-3 rounded w-full mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg sm:max-w-3xl"　>
-                        <p><a href="{{ url('/user/'. $contents->user_id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ $contents->name }}</a>
-                        >{{ $contents->name }}
-                        </p>
+                    <p><a href="{{ url('/user/'. $contents->user_id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ $contents->name }}</a>
+                        >{{ $contents->title }}
+                    </p>
+                    <div class="border">
+                        <div class="post-data flex border">
 
-                        <img src="{{ asset('storage/images/'.$contents->path) }}" class= "post-image" width="100" height="100">
-                        <div class="create-data">
-                            投稿日：{{ $contents->created_at }}
-                        </div>
-                        <div class="comment">
-                            {{ $contents->comments}}
+                            <div class="post-image px-2 pt-2">
+                                <a href="{{ url('/image/' . $contents->content_id) }}">
+                                    <img src="{{ asset('storage/images/'.$contents->path) }}" width="100" height="100">
+                                </a>
+                            </div>
+                            <div class="post-data-detail px-2 pt-2">
+                                <div class="create-data pb-6">
+                                    投稿日：{{ $contents->created_at }}
+                                </div>
+                                <div class="comment">
+                                    コメント{{ $contents->comment}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
