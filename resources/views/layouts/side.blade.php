@@ -1,15 +1,43 @@
 @section('side')
 {{-- サイドコンテンツ --}}
-<div class="side p-3">
+<div class="side px-3">
     
     {{-- ログイン状態 --}}
     <div class="bg-orange-500 rounded">
         
     @if (Route::has('login'))
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg">
-            <h2>Sign in</h2>
             @auth
-                <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">ログイン中のユーザ</a>
+                <div class="user-name">
+                    <a href="{{ url('/user/'. Auth::user()->id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ Auth::user()->name }}さん</a>
+                </div>
+                <div class="menu flex flex-col items-center	">
+                    
+                    <a href="{{ url('/uploadImage/') }}" class="">
+                        <button class="w-48 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                            画像をアップロード
+                        </button>
+                    </a>
+                    <a href="{{ url('/postImage/') }}" class="">
+                        <button class="w-48 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                            画像を投稿
+                        </button>
+                    </a>
+                    <a href="{{ url('/postMovie/') }}" class="">
+                        <button class="w-48 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                            動画を投稿
+                        </button>
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a href="{{ url('/postMovie/') }}" class="">
+                            <button type="submit" class="w-48 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                ログアウト
+                            </button>
+                        </a>
+                    </form>
+                </div>
+
             @else
             <form method="POST" action="{{ route('login') }}">
                 @csrf
@@ -30,12 +58,7 @@
                     </label>
                 </div>
 
-                <div class="flex items-center justify-end mt-4">
-                    @if (Route::has('password.request'))
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
-                        </a>
-                    @endif
+                <div class="flex items-center justify-center mt-4">
                     <x-jet-button class="ml-4">
                         {{ __('Sign in') }}
                     </x-jet-button>
@@ -43,7 +66,9 @@
             </form>
 
             @if (Route::has('register'))
+            <div class="flex items-center justify-center mt-4">
                 <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Sign up</a>
+            </div>
             @endif
             @endauth
         </div>
@@ -52,12 +77,10 @@
     {{-- ログイン状態終了 --}}
 
     {{-- ユーザ一覧 --}}
-    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg">
+    <div class="user-list w-full sm:max-w-md mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg truncate">
         <h2>ユーザー</h2>
         @foreach ($users as $user)
-            <li class="list-group-item">
             <p><a href="{{ url('/user/'.$user->id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ $user->name }}</a></p>
-            </li>
         @endforeach
         {{ $users->links() }}
 

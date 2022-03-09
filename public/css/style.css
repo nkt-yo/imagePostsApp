@@ -1,5 +1,6 @@
 li {
     list-style: none;
+    min-width: 0;
 }
 
 .contents {
@@ -14,6 +15,8 @@ li {
 
 .post-data {
     word-break: break-all;
+    min-width: 200px;
+    max-width: 800px;
 }
 
 .post-image img {
@@ -23,7 +26,31 @@ li {
     object-fit: contain;
 }
 
+.post-image-detail img {
+    display: block;
+    width: 100%;
+    min-height: 300px;
+    max-height: 800px;
+    object-fit: contain;
+}
+
 .comment {
     width: 100%;
     height: 200px;
+}
+
+iframe {
+    max-width: 100%;
+}
+
+.main {
+    min-width: 500px;
+}
+
+.user-list {
+    max-width: 350px;
+}
+
+.post-button {
+    align: right;
 }

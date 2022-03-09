@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use Illuminate\Http\Request;
+
 class Content extends Model
 {
     protected $table = 'contents';
     protected $primaryKey = 'id';
+
+    protected $guarded = ['id'];
     
     public static function findAllContents()
     {
@@ -44,6 +47,17 @@ class Content extends Model
                         ->where('contents.id', $contentId)
                         ->first();
         return $contents;
+    }
+
+    public static function insertOne($userId, $title, $type, $comment, $path)
+    {
+        // 画像をテーブルに追加
+        Content::create([
+            'user_id' => $userId,
+            'title' => $title,
+            'type' => $type,
+            'comment' => $comment,
+            'path' => $path]);
     }
 
 }

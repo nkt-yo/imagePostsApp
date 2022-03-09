@@ -17,21 +17,27 @@
                     <p><a href="{{ url('/user/'. $contents->user_id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ $contents->name }}</a>
                         >{{ $contents->title }}
                     </p>
-                    <div class="border">
-                        <div class="post-data flex border">
+                    <div class="post-data flex border">
 
-                            <div class="post-image px-2 pt-2">
+                        <div class="post-image-detail px-2 py-2">
+
+                            @if ( $contents->type == config('const.contetnsType.movie'))
+                                <div class="youtube">
+                                    <iframe width="560" height="315"  src="{{'https://www.youtube.com/embed/'. $contents->path }} " title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            @else
                                 <a href="{{ url('/image/' . $contents->content_id) }}">
-                                    <img src="{{ asset('storage/images/'.$contents->path) }}" width="100" height="100">
+                                    <img src="{{ asset('storage/'.$contents->path) }}" width="100" height="100">
                                 </a>
+                            @endif
+                        </div>
+                        <div class="post-data-detail px-2 pt-2">
+                            <div class="create-data pb-4">
+                                {{-- TODO padding bttom --}}
+                                投稿日：{{ $contents->created_at }}
                             </div>
-                            <div class="post-data-detail px-2 pt-2">
-                                <div class="create-data pb-6">
-                                    投稿日：{{ $contents->created_at }}
-                                </div>
-                                <div class="comment">
-                                    コメント{{ $contents->comment}}
-                                </div>
+                            <div class="comment">
+                                コメント：{{ $contents->comment}}
                             </div>
                         </div>
                     </div>
