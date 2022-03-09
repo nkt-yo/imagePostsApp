@@ -13,10 +13,11 @@
                 {{-- サイドコンテンツ呼び出し --}}
                 @yield('side')
                 {{-- メインコンテンツ --}}
-                <div class="main">
-                    <p><a href="{{ url('/user/'. $contents->user_id) }}" class="text-sm text-gray-700 dark:text-gray-500 underline">{{ $contents->name }}</a>
-                        >{{ $contents->title }}
-                    </p>
+                <div class="main flex flex-col">
+                    <div class="text-2xl  mt-6">
+                        <a href="{{ url('/user/'. $contents->user_id) }}" class=" text-gray-700 dark:text-gray-500">{{ $contents->name }}</a>
+                        > {{ $contents->title }}
+                    </div>
                     <div class="post-data flex border">
 
                         <div class="post-image-detail px-2 py-2">

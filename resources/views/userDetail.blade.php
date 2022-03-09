@@ -13,8 +13,12 @@
                 {{-- サイドコンテンツ呼び出し --}}
                 @yield('side')
                 {{-- メインコンテンツ --}}
-                <div class="main">
-                    <div class="image-list p-3 rounded w-full mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg sm:max-w-3xl"　>
+                <div class="main flex flex-col">
+                    <div class="text-2xl  mt-6">
+                        {{$user->name}}
+                    </div>
+
+                    <div class="image-list p-3 rounded w-full px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg sm:max-w-3xl"　>
                         <div class="grid grid-cols-3 gap-6">
                             @foreach ($contents as $content)
                             <div class="post-data px-2 pt-2 flex-col border">
