@@ -19,7 +19,7 @@ class Content extends Model
         $contents = Content::leftjoin('users', 'users.id', '=', 'contents.user_id')
                         ->select('contents.id as content_id', 'users.id as user_id', 'users.name', 'contents.title',
                                     'contents.type', 'contents.path', 'contents.created_at')
-                        ->orderBy('contents.created_at')
+                        ->orderBy('contents.created_at', 'desc')
                         ->paginate(12, ["*"], 'contentpage')
                         ->appends(["userpage" => \Request::get('userpage')]);
         return $contents;
@@ -32,7 +32,7 @@ class Content extends Model
                         ->select('contents.id as content_id', 'users.id as user_id', 'users.name', 'contents.title', 
                                     'contents.type', 'contents.path', 'contents.created_at')
                         ->where('users.id', $userid)
-                        ->orderBy('contents.created_at')
+                        ->orderBy('contents.created_at','desc')
                         ->paginate(12);
         return $contents;
     }
