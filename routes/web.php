@@ -30,7 +30,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/uploadImage/',
 Route::middleware(['auth:sanctum', 'verified'])->post('/uploadImage/',
                             [ImagePostController::class, 'uploadImage']);
 
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// 存在しないページにアクセスした場合はトップ画面を表示させる
+Route::fallback([ImagePostController::class, 'index']);
