@@ -12,7 +12,10 @@ use Illuminate\Validation\Rule;
 
 
 class ImagePostController extends Controller
-{
+{   
+    /**
+     * トップページ
+     */
     public function index(){
 
         // ユーザ一覧取得
@@ -20,9 +23,6 @@ class ImagePostController extends Controller
         
         // 画像/動画一覧取得
         $contents = Content::findAllContents();
-        foreach ($contents as $content) {
-            \Debugbar::log($content);
-        }
 
         return view('home', ['users' => $users,'contents' => $contents]);
     }
@@ -38,8 +38,6 @@ class ImagePostController extends Controller
         \Debugbar::log($users);
 
         // ユーザ名取得
-        \Debugbar::log("userDetail");
-
         $user = $this->getOneUserName($userId);
         \Debugbar::log($user->name);
 
@@ -59,9 +57,6 @@ class ImagePostController extends Controller
         // ユーザ一覧取得
         $users = $this->getUserList();
 
-        \Debugbar::log("imageDetail");
-        \Debugbar::log($users);
-        \Debugbar::log($contentId);
         // 画像/動画情報取得
         $contents = Content::findOneImageDetail($contentId);
         \Debugbar::log($contents);
@@ -112,18 +107,19 @@ class ImagePostController extends Controller
                     $extension = ".png";
                 }else{
                     \Debugbar::log("画像取得失敗");
+                    return redirect('/uploadImage')->withErrors('画像取得に失敗しました。');
                 }
+
+                $path = 'images/' . uniqid() . $extension;
+                // 画像の保存
+                Storage::put('public/' . $path , $imgData);
+                
+                // コンテンツテーブルに登録
+                Content::insertOne($authUser['id'], $title, $type, $comment, $path);
             }
-
-            $path = 'images/' . uniqid() . $extension;
-            Storage::put('public/' . $path , $imgData);
-            \DebugBar::log($path);
-            
-            Content::insertOne($authUser['id'], $title, $type, $comment, $path);
-
         } catch (\Exception $e) {
             \Debugbar::log("画像取得失敗");
-            // ユーザ一覧取得
+            return redirect('/uploadImage')->withErrors('画像取得に失敗しました。');
         }
 
         // ユーザ一覧取得
@@ -155,8 +151,9 @@ class ImagePostController extends Controller
         $title = $request['title'];
         $comment = $request['comment'];
         $type = config('const.contetnsType.image');
+        // 最大画像サイズは10MB
         $request->validate([
-			'image' => 'required|file|image|max:1024|mimes:png,jpeg'
+			'image' => 'required|file|image|max:10240|mimes:png,jpeg'
 		]);
 
         try {
@@ -172,9 +169,10 @@ class ImagePostController extends Controller
             }
         } catch (\Exception $e) {
             \Debugbar::log("画像取得失敗");
+            // エラーメッセージを設定
+            return redirect('/postImage')->withErrors('画像取得に失敗しました。');
         }
 
-        // コンテンツ情報追加のメソッドを追加する
         // ユーザ一覧取得
         $users = $this->getUserList();
         $authUser = $this->getAuthUser();
@@ -213,13 +211,12 @@ class ImagePostController extends Controller
         $youtubeId = $this->getYoutubeId($url);
         if ($youtubeId === false) {
             \DebugBar::log("動画の取得に失敗しました。");
+            return redirect('/postMovie')->withErrors('動画取得に失敗しました。');
         }else{
             \DebugBar::log($youtubeId);
             \DebugBar::log("動画取得成功");
             Content::insertOne($authUser['id'], $title, $type, $comment, $youtubeId);
         }
-
-
 
         // コンテンツ情報追加のメソッドを追加する
         // ユーザ一覧取得
@@ -235,10 +232,6 @@ class ImagePostController extends Controller
     {
         // ユーザ一覧
         $users = User::findAllUserName();
-        foreach ($users as $user) {
-            \Debugbar::log($user->name);
-            \Debugbar::log($user->id);
-        }
         return $users;
     }
 
