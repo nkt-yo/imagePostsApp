@@ -16,7 +16,7 @@ li {
 .post-data {
     word-break: break-all;
     min-width: 200px;
-    max-width: 800px;
+    max-width: 850px;
 }
 
 .post-image img {
@@ -30,7 +30,7 @@ li {
     display: block;
     width: 100%;
     min-height: 300px;
-    max-height: 800px;
+    max-height: 850px;
     object-fit: contain;
 }
 
@@ -51,6 +51,6 @@ iframe {
     max-width: 350px;
 }
 
-.post-button {
-    align: right;
+.title {
+    padding-top: 25px;
 }

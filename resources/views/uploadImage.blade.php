@@ -3,14 +3,15 @@
 @include('layouts.side')
 @include('layouts.head')
 @include('layouts.error')
+@include('layouts.title')
     <head>
         @yield('head')
     </head>
     <body class="antialiased">
-        <div class="container mx-auto my-5 px-5 flex justify-center">
-            
+        <div class="container mx-auto my-5 px-5 flex justify-center flex-col">
+          @yield('title')      
             <!-- ログイン状態・ユーザ一覧・画像一覧 -->
-            <div class="contents">
+            <div class="contents mx-auto my-5 px-5">
                 {{-- サイドコンテンツ呼び出し --}}
                 @yield('side')
                 {{-- メインコンテンツ --}}

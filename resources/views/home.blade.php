@@ -2,19 +2,20 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.side')
 @include('layouts.head')
+@include('layouts.title')
     <head>
         @yield('head')
     </head>
     <body class="antialiased">
-        <div class="mx-auto my-5 px-5 flex justify-center">
+        <div class="mx-auto my-5 px-5 flex justify-center flex-col">
+            @yield('title')
             <!-- ログイン状態・ユーザ一覧・画像一覧 -->
-            <div class="contents">
+            <div class="contents mx-auto my-5 px-5">
                 {{-- サイドコンテンツ呼び出し --}}
                 @yield('side')
                 {{-- メインコンテンツ --}}
                 <div class="main">
                     <div class="p-3 rounded w-full mt-6 px-6 py-4 bg-slate-600 shadow-md sm:rounded-lg sm:max-w-3xl"　>
-                        <h2>画像一覧</h2>
                         <div class="image-list grid grid-cols-3 gap-4">
                             @foreach ($contents as $content)
                             <div class="post-data px-2 pt-2 flex-col border">
