@@ -27,6 +27,9 @@ class ImagePostController extends Controller
         return view('home', ['users' => $users,'contents' => $contents]);
     }
 
+    /**
+     * ユーザページ
+     */
     public function userDetail($userId){
 
 
@@ -35,8 +38,10 @@ class ImagePostController extends Controller
         \Debugbar::log($users);
 
         // ユーザ名取得
+        \Debugbar::log("userDetail");
+
         $user = $this->getOneUserName($userId);
-        \Debugbar::log($user);
+        \Debugbar::log($user->name);
 
         // 画像/動画一覧取取得
         $contents = Content::findOneUserDetail($userId);
@@ -47,9 +52,15 @@ class ImagePostController extends Controller
         return view('userDetail', ['users' => $users,'user' => $user,'contents' => $contents]);
     }
 
+    /**
+     * 画像ページ
+     */
     public function imageDetail($contentId){
         // ユーザ一覧取得
         $users = $this->getUserList();
+
+        \Debugbar::log("imageDetail");
+        \Debugbar::log($users);
         \Debugbar::log($contentId);
         // 画像/動画情報取得
         $contents = Content::findOneImageDetail($contentId);
@@ -58,6 +69,9 @@ class ImagePostController extends Controller
         return view('imageDetail', ['users' => $users, 'contents' => $contents]);
     }
 
+    /**
+     *  画像アップロードページ
+     */
     public function uploadImageIndex(){
         // ユーザ一覧取得
         $users = $this->getUserList();
@@ -65,46 +79,49 @@ class ImagePostController extends Controller
         return view('uploadImage', ['users' => $users, 'authUser' => $authUser]);
     }
 
+    /**
+     *  画像アップロード
+     */
     public function uploadImage(Request $request){
 
         // ログイン中のユーザ情報取得
         $authUser = $this->getAuthUser();
         $imageUrl = $request['image-url'];
-        // ダウンロードしたファイルが画像かどうか
-        $isImage = false;
         $title = $request['title'];
-
-
         $comment = $request['comment'];
         $type = config('const.contetnsType.image');
 
+        try {
+            $imgData = file_get_contents($imageUrl);
+            \Debugbar::log($imgData);
 
-        $imgData = file_get_contents($imageUrl);
-        \Debugbar::log($imgData);
-
-        $pos = strpos($http_response_header[0], '200');
-        if (!$pos) {
-            // ファイルを取得できなかった場合
-        }else{
-            $imageSize = getimagesize('data:application/octet-stream;base64,' . base64_encode($imgData));
-            \Debugbar::log($imageSize);
-            if ($imageSize['mime'] == "image/jpeg") {
-                $extension = ".jpg";
-                $isImage = true;
-            }elseif ($imageSize['mime'] == "image/png") {
-                $extension = ".png";
-                $isImage = true;
+            $pos = strpos($http_response_header[0], '200');
+            if (!$pos) {
+                // ファイルを取得できなかった場合
             }else{
-                // dame
+                $imageSize = getimagesize('data:application/octet-stream;base64,' . base64_encode($imgData));
+                \Debugbar::log($imageSize);
+                
+                // 画像タイプによって拡張子を決める
+                if ($imageSize['mime'] == "image/jpeg") {
+                    $extension = ".jpg";
+                }elseif ($imageSize['mime'] == "image/png") {
+                    $extension = ".png";
+                }else{
+                    \Debugbar::log("画像取得失敗");
+                }
             }
 
-        }
+            $path = 'images/' . uniqid() . $extension;
+            Storage::put('public/' . $path , $imgData);
+            \DebugBar::log($path);
+            
+            Content::insertOne($authUser['id'], $title, $type, $comment, $path);
 
-        $path = 'images/' . uniqid() . $extension;
-        Storage::put('public/' . $path , $imgData);
-        \DebugBar::log($path);
-        
-        Content::insertOne($authUser['id'], $title, $type, $comment, $path);
+        } catch (\Exception $e) {
+            \Debugbar::log("画像取得失敗");
+            // ユーザ一覧取得
+        }
 
         // ユーザ一覧取得
         $users = $this->getUserList();
@@ -112,14 +129,19 @@ class ImagePostController extends Controller
         return view('uploadImage', ['users' => $users, 'authUser' => $authUser]);
     }
 
-    
+    /**
+     * 画像投稿ページ
+     */
     public function postImageIndex(){
         // ユーザ一覧取得
         $users = $this->getUserList();
         $authUser = $this->getAuthUser();
         return view('postImage', ['users' => $users, 'authUser' => $authUser]);
     }
-
+    
+    /**
+     * 画像投稿
+     */
     public function postImage(Request $request){
 
         // ログイン中のユーザ情報取得
@@ -127,21 +149,24 @@ class ImagePostController extends Controller
         $title = $request['title'];
         $comment = $request['comment'];
         $type = config('const.contetnsType.image');
-
-
         $request->validate([
 			'image' => 'required|file|image|max:1024|mimes:png,jpeg'
 		]);
-		$uploadImage = $request->file('image');
 
-		if($uploadImage) {
-			$path = $uploadImage->store('images',"public");
-			if($path){
-                // 画像に保存成功後、コンテンツテーブルに追加する
-                Content::insertOne($authUser['id'], $title, $type, $comment, $path);
-                \Debugbar::log($path);
-			}
-		}
+        try {
+            $uploadImage = $request->file('image');
+
+            if($uploadImage) {
+                $path = $uploadImage->store('images',"public");
+                if($path){
+                    // 画像に保存成功後、コンテンツテーブルに追加する
+                    Content::insertOne($authUser['id'], $title, $type, $comment, $path);
+                    \Debugbar::log($path);
+                }
+            }
+        } catch (\Exception $e) {
+            \Debugbar::log("画像取得失敗");
+        }
 
         // コンテンツ情報追加のメソッドを追加する
         // ユーザ一覧取得
@@ -151,6 +176,10 @@ class ImagePostController extends Controller
         return view('postImage', ['users' => $users, 'authUser' => $authUser]);
     }
 
+
+    /**
+     * 動画投稿ページ
+     */
     public function postMovieIndex(){
         // ユーザ一覧取得
         $users = $this->getUserList();
@@ -158,6 +187,9 @@ class ImagePostController extends Controller
         return view('postMovie', ['users' => $users, 'authUser' => $authUser]);
     }
 
+    /**
+     * 動画投稿
+     */
     public function postMovie(Request $request){
 
         // ログイン中のユーザ情報取得
@@ -187,8 +219,6 @@ class ImagePostController extends Controller
         $authUser = $this->getAuthUser();
         return view('postMovie', ['users' => $users, 'authUser' => $authUser]);
     }
-
-
 
     /**
      * ユーザ一覧取得
@@ -224,8 +254,6 @@ class ImagePostController extends Controller
         \Debugbar::log($authUser);
 
         // 現在認証しているユーザーのIDを取得
-
-
         return  ['id' => $authUser->id, 'name' => $authUser->name];
     }
 
