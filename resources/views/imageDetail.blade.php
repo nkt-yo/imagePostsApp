@@ -27,7 +27,7 @@
                                     <iframe width="560" height="315"  src="{{'https://www.youtube.com/embed/'. $contents->path }} " title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             @else
-                                <a href="{{ url('/image/' . $contents->content_id) }}">
+                                <a href="{{ asset('storage/'.$contents->path) }}"  target=”_blank” >
                                     <img src="{{ asset('storage/'.$contents->path) }}" width="100" height="100">
                                 </a>
                             @endif
