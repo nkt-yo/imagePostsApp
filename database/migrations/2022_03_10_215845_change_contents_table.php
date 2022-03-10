@@ -18,7 +18,8 @@ class ChangeContentsTable extends Migration
             // 255文字→30文字
             $table->string('title', 30)->change();
             // 65,535文字→150文字
-            $table->string('comment',150)->change();
+            // NOT NULL制約
+            $table->string('comment',150)->nullable(false)->change();
         });
     }
 
