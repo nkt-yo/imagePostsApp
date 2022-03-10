@@ -160,7 +160,9 @@ return [
     'attributes' => [
         'name' => 'ユーザー名',
         'email' => 'メールアドレス',
-        'password' => 'パスワード'
+        'title' => 'タイトル',
+        'comment' => 'パスワード',
+        'image' => '画像',
     ],
 
 ];

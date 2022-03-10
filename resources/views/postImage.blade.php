@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.side')
 @include('layouts.head')
+@include('layouts.error')
     <head>
         @yield('head')
     </head>
@@ -20,6 +21,7 @@
             
                       <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
+                          @yield('error')
                           <label class="block tracking-wide mb-2" for="">
                           タイトル
                           </label>

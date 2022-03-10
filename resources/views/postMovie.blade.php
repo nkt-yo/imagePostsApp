@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layouts.side')
 @include('layouts.head')
+@include('layouts.error')
     <head>
         @yield('head')
     </head>
@@ -20,6 +21,7 @@
           
                       <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
+                          @yield('error')
                           <label class="block tracking-wide mb-2" for="">
                           タイトル
                           </label>
@@ -33,7 +35,7 @@
                           <label class="block tracking-wide mb-2" for="">
                             Youtube URL
                           </label>
-                          <textarea name="movie-url" cols="40" rows="3"></textarea>
+                          <textarea name="url" cols="40" rows="3"></textarea>
                           <button type="submit" class="flex bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                           投稿
                         </div>

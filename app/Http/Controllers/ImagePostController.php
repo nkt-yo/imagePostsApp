@@ -84,9 +84,12 @@ class ImagePostController extends Controller
      */
     public function uploadImage(Request $request){
 
+        // バリデーションチェック
+        $this->validationUplaodImage($request);
+        
         // ログイン中のユーザ情報取得
         $authUser = $this->getAuthUser();
-        $imageUrl = $request['image-url'];
+        $imageUrl = $request['url'];
         $title = $request['title'];
         $comment = $request['comment'];
         $type = config('const.contetnsType.image');
@@ -144,6 +147,9 @@ class ImagePostController extends Controller
      */
     public function postImage(Request $request){
 
+        // バリデーションチェック
+        $this->validationPostImage($request);
+
         // ログイン中のユーザ情報取得
         $authUser = $this->getAuthUser();
         $title = $request['title'];
@@ -192,11 +198,13 @@ class ImagePostController extends Controller
      */
     public function postMovie(Request $request){
 
+        // バリデーションチェック
+        $this->validationUplaodImage($request);
+
         // ログイン中のユーザ情報取得
         $authUser = $this->getAuthUser();
-        $movie = $request['movie-url'];
         $title = $request['title'];
-        $url = $request['movie-url'];
+        $url = $request['url'];
         $comment = $request['comment'];
         $type = config('const.contetnsType.movie');
 
@@ -270,5 +278,29 @@ class ImagePostController extends Controller
         }else{
             return false;
         }
+    }
+
+    /**
+     * 画像/動画投稿ページ用バリデーション
+     */
+    public function validationUplaodImage(Request $request){
+
+        $request->validate([
+            'title' => 'required|max:30',
+            'comment' => 'required|max:150',
+            'url' => 'required',
+        ]);
+    }
+
+    /**
+     * 画像アップロードページ用バリデーション
+     */
+    public function validationPostImage(Request $request){
+
+        $request->validate([
+            'title' => 'required|max:30',
+            'comment' => 'required|max:150',
+            'image' => 'required',
+        ]);
     }
 }
